@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-..." crossorigin="anonymous">
+
+
+    <title>To-Do List</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark"> <!--yaha bhi change kiya-->
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Dropdown
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+              </li>
+            </ul>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container my-4" >
+        <!-- <form> removed this form tag because when you are clicking on this  voh submit hojaraha hai aur console window par show nahi horaha tha -->
+            <div class="mb-3">
+              <label for="title" class="form-label">Title</label>
+              <input type="text" class="form-control" id="title" aria-describedby="emailHelp">
+              <div id="emailHelp" class="form-text">Add an Item to the List.</div>
+            </div>
+            <div class="mb-3">
+              <label for="description" class="form-label" >Description</label>
+              <input type="text" placeholder="Write a Description here" class="form-control" id="description">
+            </div>
+            <!-- <div class="form-group ">
+              <label for="comments">Comments</label>
+              <textarea class="form-control" placeholder="Leave a comment here" id="comments" rows="3" ></textarea>
+            </div> -->
+            <button type="button" id="add" class="btn btn-primary">Add to List</button><!--event listner lagaya matlab id=add karke issey agar click karoge tho kya hoga?-->
+            <button  id="clear" class="btn btn-primary" onclick="clearStorage()">Clear List</button> <!--ek aur clear all ka button bhanaru jisse ek click meh sub clear jojaye-->
+          <!-- </form> -->
+          <div id="items" my-4>
+            <h2>Your Items</h2>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">SNo</th>
+                  <th scope="col">Item Title</th>
+                  <th scope="col">Item Description</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr>
+                  <th scope="row">1</th>
+                  <td>get some coffe</td>
+                  <td>you are a developer</td>
+                  <td><button class="btn btn-sm btn-primary">Delete</button></td> <!--btn-sm matlab button ko small karega bootstrap ka class hai and btn-primary ka matlab button blue colour ka hoga-->
+                </tr>
+                
+              </tbody>
+            </table>
+          </div>
+      </div>
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    -->
+    <script>
+      function getAndupdate(){ //yeh alag sey bhanaya kyu ki jab delete karoge tho every time voh new title and description leyraha hai, kyu ki neeche vohi hai, issliye isko alag function meh daaldhiya
+        console.log("Click kiya apne");
+       let tit = document.getElementById("title").value;
+       let desc = document.getElementById("description").value;
+       if(localStorage.getItem("itemsJson")==null){ //agar itemsJson wala name se kuch bhi nahi hai (==null) tho itemsJson bhanadho
+          itemJsonArray = [];
+          itemJsonArray.push(tit, desc);
+          //neeche stringify() use karke we are converting "object" to "strin"g
+          localStorage.setItem("itemsJson", JSON.stringify(itemJsonArray)) // issey mere localStorage pe yeh ek array save hojayega aur dikhega jab tumdekho
+        }else{ //yeh else block meh- jitne bhi add to list karlo yeh sub dikhayega, jab ki agar sirf uppar wala if condion tha tho sirf voh ek particular hi dikhayega 
+          itemJsonArraystr = localStorage.getItem("itemsJson"); //getItem karoge tho voh string hogi, tho tumhe Json .parse karna padega
+          itemJsonArray = JSON.parse(itemJsonArraystr); //yaha parse() use karke we are converting "string" into "object" --> so mujhe mera item array mujhe miljayega
+          itemJsonArray.push([tit, desc]);
+          localStorage.setItem("itemsJson", JSON.stringify(itemJsonArray))
+        }
+        update(); //firse function call kiya
+      }
+      function update(){ //yeh function sirf populate karega data ko
+        if(localStorage.getItem("itemsJson")==null){ //agar itemsJson wala name se kuch bhi nahi hai (==null) tho itemsJson bhanadho
+          itemJsonArray = []; //agar null hai tho usko null hi rahene dho aisa kuch hai is line ka matlab
+          // itemJsonArray.push(tit, desc); kuch bhi push na kare, bus null karke set item kardhe
+          //neeche stringify() use karke we are converting "object" to "strin"g
+          localStorage.setItem("itemsJson", JSON.stringify(itemJsonArray)) // issey mere localStorage pe yeh ek array save hojayega aur dikhega jab tumdekho
+        }else{ //yeh else block meh- jitne bhi add to list karlo yeh sub dikhayega, jab ki agar sirf uppar wala if condion tha tho sirf voh ek particular hi dikhayega 
+          itemJsonArraystr = localStorage.getItem("itemsJson"); //getItem karoge tho voh string hogi, tho tumhe Json .parse karna padega
+          itemJsonArray = JSON.parse(itemJsonArraystr); //yaha parse() use karke we are converting "string" into "object" --> so mujhe mera item array mujhe miljayega
+          
+        }
+        //pupulate the table- jo bhi data abb tak show horaha tha browser ke console par voh sub abb hum show karayenge browser par table ki form meh
+        let tableBody = document.getElementById("tableBody");
+        let str = "";//blank string
+        itemJsonArray.forEach((element, index) => { //index jo bhi hai voh ayega aur usko neeche serial number jaisa lelengey 
+          str += `
+          <tr>
+                  <th scope="row">${index +1}</th>  
+                  <td>${element[0]}</td>
+                  <td>${element[1]}</td>
+                  <td><button class="btn btn-sm btn-primary" onClick="deleted(${index})" >Delete</button></td> 
+                </tr>`; //for each loop ended here
+        });
+        // <td>${element[0]}</td> iska matlab titile
+        // <td>${element[1]}</td> iska matlab description
+        tableBody.innerHTML= str;
+      }
+      add = document.getElementById("add");
+      add.addEventListener("click", getAndupdate); //jaise hi koi click kare, mai yeh chata hu ki mera update function call hojaye
+      update();                           
+      function deleted(itemIndex){
+        console.log("Delete kardiya",itemIndex); //yeh bus check kareki delete button pe click karoge tho yeh print honna chaiye
+        itemJsonArraystr = localStorage.getItem("itemsJson");  //jisko delete karna hai usko tho first fetch karega //iska string type meh hai neeche ka array type
+        itemJsonArray = JSON.parse(itemJsonArraystr); //aur convert bhi hojayega array meh
+        //Delete itemIndex element from the array
+        itemJsonArray.splice(itemIndex, 1);
+        localStorage.setItem("itemsJson", JSON.stringify(itemJsonArray)) //save karrum jo bhi data bacha hua hai aur update ko call karumm
+        update(); // yaaniki jab mai mera item ko delete kardhu tho delete honna chaiye
+      }  
+      function clearStorage(){
+        if(confirm("Do you want to Clear Data?")){
+          console.log("Clearing Full Data")
+          localStorage.clear();
+          update();
+          }
+        }
+    </script>
+  </body>
+</html>
